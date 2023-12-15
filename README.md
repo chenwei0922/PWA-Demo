@@ -2,7 +2,7 @@
 直接打开`test.html`即可
 
 # 服务地址
-[Demo页面](https://chenwei0922.github.io/PWA-Demo/index.html)
+[Demo页面](https://chenwei0922.github.io/PWA-Demo/test.html)
 
 # Getting Started with Create React App
 
