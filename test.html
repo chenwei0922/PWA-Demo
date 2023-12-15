@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="manifest" href="/manifest.json" />
+</head>
+
+<body>
+  <h1>测试桌面快捷方式(仅chrome+https可手动触发)</h1>
+  <p id="tip" style="background-color: red;"></p>
+  <button id="install" style="display: none; height: 100px; background-color: red;">立即安装</button>
+  <p id="guide" style="display: none;">
+    点击分享按钮，然后选择添加到主屏幕
+  </p>
+</body>
+
+<script>
+  var PWA = {
+    deferredPrompt: null,
+    init() {
+      const tip = document.getElementById("tip")
+      const install = document.getElementById('install')
+      const guide = document.getElementById('guide')
+
+      if (PWA.getPWADisplayMode() === 'standalone') {
+        //快捷方式打开的
+        install.style.display = 'none'
+        guide.style.display = 'none'
+      } else if (PWA.getPWADisplayMode() === 'browser') {
+        //浏览器打开的
+        if(window.navigator && window.navigator.userAgent.match(/Chrome/i)){
+        }else{
+          guide.style.display = 'block'
+        }
+      }
+
+      //chorme only
+      window.addEventListener("beforeinstallprompt", (e) => {
+        console.log('beforeinstallprompt')
+        // Prevent the mini-infobar from appearing on mobile
+        e.preventDefault();
+        // Stash the event so it can be triggered later.
+        PWA.deferredPrompt = e;
+        // Update UI notify the user they can install the PWA
+        install.style.display = 'block'
+      });
+
+      window.addEventListener('appinstalled', () => {
+        // Log install to analytics
+        console.log('INSTALL: Success');
+      });
+
+      install.addEventListener('click', () => {
+        install.style.display = 'none'
+        // Show the install prompt
+        PWA.deferredPrompt.prompt();
+        // Wait for the user to respond to the prompt
+        PWA.deferredPrompt.userChoice.then((choiceResult) => {
+          console.log('?????choiceResult=', choiceResult)
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+            tip.innerText = 'User accepted the install prompt'
+          } else {
+            console.log('User dismissed the install prompt');
+            tip.innerText = 'User dismissed the install prompt'
+          }
+        });
+      })
+    },
+    getPWADisplayMode() {
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+      if (document.referrer.startsWith('android-app://')) {
+        return 'twa';
+      } else if (navigator.standalone || isStandalone) {
+        return 'standalone';
+      }
+      return 'browser';
+    }
+  }
+
+  PWA.init()
+</script>
+
+</html>
