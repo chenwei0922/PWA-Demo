@@ -4,6 +4,11 @@
 # 服务地址
 [Demo页面](https://chenwei0922.github.io/PWA-Demo/test.html)
 
+# PWA 知识点
+> `beforeinstallprompt` 为谷歌浏览器特有事件。当满足添加主屏幕条件时，才会触发此方法。条件为: `https`加载的网页及有效的`web app manifest`文件。通过监听该事件，可以在网页上添加自定义操作，如手动触发安装的提示或者立即安装按钮。
+> 配置`manifest.json` 文件
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

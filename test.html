@@ -18,6 +18,10 @@
 </body>
 
 <script>
+  var ua = {
+    isMobile: window.navigator.userAgent.match(/Mobile/i),
+    isChrome: window.navigator.userAgent.match(/[Chrome|CriOS]/i),
+  }
   var PWA = {
     deferredPrompt: null,
     init() {
@@ -31,7 +35,7 @@
         guide.style.display = 'none'
       } else if (PWA.getPWADisplayMode() === 'browser') {
         //浏览器打开的
-        if(window.navigator && window.navigator.userAgent.match(/Chrome/i)){
+        if(ua.isMobile && ua.isChrome){
         }else{
           guide.style.display = 'block'
         }
